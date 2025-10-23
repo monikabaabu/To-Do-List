@@ -65,9 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
         checkbox.addEventListener('change', () => {
             const isChecked = checkbox.checked;
             li.classList.toggle('completed', isChecked);
-            editBtn.disabled = isChecked;
-            editBtn.style.opacity = isChecked ? 0.4 : 1;
-            editBtn.style.pointerEvents = isChecked ? 'none' : 'auto';
+            if(isChecked){
+            editBtn.disabled = true;
+            editBtn.style.opacity =  0.4 ;
+            editBtn.style.pointerEvents = 'none';
+            }
+            else{
+                editBtn.disabled = false;
+            editBtn.style.opacity = 1;
+            editBtn.style.pointerEvents = 'auto';
+            }
             updateProgress();
             saveTasksToLocalStorage();
         });

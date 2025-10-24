@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const todosContainer = document.querySelector('.todos-container');
     const progressBar = document.getElementById('progress');
     const progressNumber = document.getElementById('numbers');
+    const clearBtn = document.getElementById('clear-btn');
+
+    const updateClearButtonVisibility = () => {
+        clearBtn.style.display = taskList.children.length > 0 ? 'block' : 'none';
+    };
 
     const toggleEmptyState = () => {
         todosContainer.style.width = taskList.children.length > 0 ? '80%' : '50%';
@@ -34,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         savedTasks.forEach(({text, completed})=> addTask(text, completed, false));
         toggleEmptyState();
         updateProgress();
+        updateClearButtonVisibility();
     };
 
     const addTask = (text, completed = false, checkCompletion = true) => {
@@ -86,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleEmptyState();
                 updateProgress(false);
                 saveTasksToLocalStorage();
+                updateClearButtonVisibility();
 
             }
         });
@@ -95,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleEmptyState();
             updateProgress();
             saveTasksToLocalStorage();
+            updateClearButtonVisibility();
         });
 
         taskList.appendChild(li);
@@ -102,14 +110,27 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleEmptyState();
         updateProgress(checkCompletion);
         saveTasksToLocalStorage();
+        updateClearButtonVisibility();
     };
-    addTaskBtn.addEventListener('click',() => addTask());
+    addTaskBtn.addEventListener('click',(e) =>{
+        e.preventDefault();
+        addTask();
+    }); 
     taskInput.addEventListener('keypress',(e) => {
         if(e.key === 'Enter'){
             e.preventDefault();
             addTask();
         }
-    }) ;
+    });
+
+    clearBtn.addEventListener('click', () => {
+        taskList.innerHTML = '';
+        localStorage.removeItem('tasks');
+        updateProgress();
+        toggleEmptyState();
+        updateClearButtonVisibility();
+    });
+
     loadTasksFromLocalStorage();
 
 });
